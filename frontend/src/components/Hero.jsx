@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { styles } from "../styles";
 import { slideIn } from "../utils/motion";
-
+import {logo} from "../assets"
 const Hero = () => {
   const formRef = useRef();
   const [form, setForm] = useState({
@@ -25,7 +25,8 @@ const Hero = () => {
         variants={slideIn("left", "tween", 0.2, 1)}
         className='flex-[0.75] bg-black-100 mt-16 p-8 rounded-2xl'
       >
-        
+        <p className={styles.sectionSubText}>Convert NFT with a click</p>
+        <h3 className={styles.sectionHeadText}>Convert NFT</h3>
 
         <form
           ref={formRef}
@@ -44,13 +45,13 @@ const Hero = () => {
             />
           </label>
           <label className='flex flex-col'>
-            <span className='text-white font-medium mb-4'>Your email</span>
+            <span className='text-white font-medium mb-4'>Choose png</span>
             <input
               type='file'
-              name='email'
+              name='file'
               value={form.email}
               // onChange={handleChange}
-              placeholder="What's your e-mail address?"
+              placeholder=""
               className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
             />
           </label>
@@ -64,6 +65,13 @@ const Hero = () => {
           </button>
         </form>
       </div>
+      <div
+        variants={slideIn("right", "tween", 0.2, 1)}
+        className='flex-[0.75] bg-black-100 mt-16 p-8 rounded-2xl'
+      >
+        <img src={logo}/>
+        
+        </div>
 
      
     </div>
