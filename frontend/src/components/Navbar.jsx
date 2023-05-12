@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { parseAddress } from "../utils/parseAddress";
+import { useSetAccount } from "../hooks/useSetAccount";
+import { useSelector } from "react-redux";
 import { styles } from "../styles";
 import { navLinks } from "../constants";
-import { logo, menu, close } from "../assets";
+import { logo, menu, close, metamask } from "../assets";
 
 const Navbar = () => {
+  const connectAccount = useSetAccount();
+  const account = useSelector((state) => state.accounts.account);
   const [active, setActive] = useState("");
   const [toggle, setToggle] = useState(false);
+  const [loading,setLoading] = useState(false)
   return (
     <nav
       className={`
@@ -15,6 +20,7 @@ const Navbar = () => {
       `}
     >
       <div className="flex items-center max-w-7xl mx-auto justify-between w-full">
+        
         <Link
           to="/"
           className="flex items-center gap-2"
@@ -37,9 +43,18 @@ const Navbar = () => {
               } hover:text-white text-[18px] font-medium cursor-pointer`}
               onClick={() => setActive(link.title)}
             >
+              
               <a href={`#${link.id}`}>{link.title}</a>
             </li>
           ))}
+          <li>
+          <button className='bg-tertiary   rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary'
+        onClick={() => connectAccount()}
+        >
+          
+          {account ? parseAddress(account) : "Connect Wallet" }
+        </button>
+          </li>
         </ul>
         <div className="sm:hidden flex flex-1 justify-end items-center">
           <img
@@ -52,7 +67,7 @@ const Navbar = () => {
               !toggle ? "hidden" : "flex"
             } p-6 black-gradient absolute top-20 right-0 mx-4 my-2 min-w-[140px] z-10 rounded-xl `}
           >
-            <button>hi</button>
+            
             <ul className="list-none flex justify-end items-start flex-col gap-4">
               {navLinks.map((link) => (
                 <li
