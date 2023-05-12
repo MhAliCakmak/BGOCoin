@@ -49,7 +49,7 @@ const Hero = () => {
               type='file'
               name='file'
               value={form.file}
-              onChange={this.fileSelectHandler}
+              // onChange={handleChange}
               placeholder=""
               className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
             />
