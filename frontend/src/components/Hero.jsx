@@ -7,8 +7,7 @@ const Hero = () => {
   const formRef = useRef();
   const [form, setForm] = useState({
     name: "",
-    email: "",
-    message: "",
+    photo: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -49,8 +48,8 @@ const Hero = () => {
             <input
               type='file'
               name='file'
-              value={form.email}
-              // onChange={handleChange}
+              value={form.file}
+              onChange={this.fileSelectHandler}
               placeholder=""
               className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
             />
@@ -61,7 +60,7 @@ const Hero = () => {
             type='submit'
             className='bg-tertiary py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary'
           >
-            {loading ? "Sending..." : "Send"}
+            {loading ? "Converting..." : "Convert"}
           </button>
         </form>
       </div>
