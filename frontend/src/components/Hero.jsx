@@ -18,14 +18,14 @@ const Hero = () => {
 
   return (
     <div
-      className={`xl:mt-12 pt-5 p-36 px-40  flex xl:flex-row flex-col-reverse gap-10 overflow-hidden`}
+      className={`xl:mt-12 pt-5 p-36  flex xl:flex-row flex-col-reverse gap-10 overflow-hidden`}
     >
       <div
         variants={slideIn("left", "tween", 0.2, 1)}
         className='flex-[0.75] bg-black-100 mt-16 p-8 rounded-2xl'
       >
         <p className={styles.sectionSubText}>Convert NFT with a click</p>
-        <h3 className={styles.sectionHeadText}>Convert NFT</h3>
+        <h3 className={styles.sectionHeadText}> NFT</h3>
 
         <form
           ref={formRef}
@@ -39,7 +39,7 @@ const Hero = () => {
               name='name'
               value={form.name}
               // onChange={handleChange}
-              placeholder="What's your name?"
+              placeholder="name"
               className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
             />
           </label>
