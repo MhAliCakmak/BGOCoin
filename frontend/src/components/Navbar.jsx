@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { parseAddress } from "../utils/parseAddress";
-import { useSetAccount } from "../hooks/useSetAccount";
+import { useSetAccount } from "../hooks";
 import { useSelector } from "react-redux";
 import { styles } from "../styles";
 import { navLinks } from "../constants";

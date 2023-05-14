@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-
+import {useContractFunctions,useNFTFunctions} from "../hooks"
 import { styles } from "../styles";
 import { slideIn } from "../utils/motion";
 import {logo} from "../assets"
