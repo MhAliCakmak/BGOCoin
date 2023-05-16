@@ -10,6 +10,9 @@ export const accountsSlice = createSlice({
   reducers: {
     setAccount: (state, action) => {
       state.account = action.payload;
+    },
+    setNFTs:(state,action)=>{
+      state.account = action.payload;
     }
   },
 });
