@@ -8,7 +8,7 @@ const useNFTFunctions = () => {
     const signer = provider.getSigner();
     const contract = new ethers.Contract(NFT_ADDRESS,NFT_ABI, provider); 
     const mint = async ( quantity) => {
-        const transaction = await nft.connect(signer).mint(quantity, { value: ethers.utils.parseUnits("1", "ether") })
+        const transaction = await contract.connect(signer).mint(quantity, { value: ethers.utils.parseUnits("0.01", "ether") })
         await transaction.wait();
     }
     const approve = async (tokenId, quantity) => {
