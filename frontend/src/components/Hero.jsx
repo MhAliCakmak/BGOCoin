@@ -1,7 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useContractFunctions, useNFTFunctions } from "../hooks";
 import { NFTStorage, File } from "nft.storage";
+import axios from 'axios';
 
+import { Buffer } from 'buffer'
+import Spinner from 'react-bootstrap/Spinner';
 import { styles } from "../styles";
 import { slideIn } from "../utils/motion";
 import { logo } from "../assets";
@@ -12,14 +15,32 @@ const Hero = () => {
   const [message, setMessage] = useState(null);
   const [nft, setNft] = useState(null);
   const [url,setUrl] = useState(null);
-  const formRef = useRef();
-  const [form, setForm] = useState({
-    name: "",
-    photo: "",
-    description: "",
-  });
+  
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
+  const [image,setImage]=useState(null)
   
   const [loading, setLoading] = useState(false);
+  const createImage = async () => {
+    setMessage("Generating Image...")
+
+    // You can replace this with different model API's
+    const URL = `https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2`
+
+    // Send the request
+    const response = await axios({
+      url: URL,
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_HUGGING_FACE_API_KEY}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      data: JSON.stringify({
+        inputs: description, options: { wait_for_model: true },
+      }),
+      responseType: 'arraybuffer',
+    })}
   const uploadImage = async (imageData) => {
     setMessage("uploading Image ...")
     // Create instance to NFT.Storage
@@ -37,20 +58,15 @@ const Hero = () => {
     setMessage("Image uploaded successfully")
     return url
   };
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
-
-    if (form.name === "" || form.photo === "") {
-      window.alert("Please provide a name and description");
-      return;
-    }
     setLoading(true);
-    uploadImage(form.photo);
-    mint(nft);
-    approveNFT(nft);
-    setLoading(false);
+
+    createImage()
   };
+
+  
 
   return (
     <div
@@ -60,11 +76,10 @@ const Hero = () => {
         variants={slideIn("left", "tween", 0.2, 1)}
         className="flex-[0.75] bg-black-100 mt-16 p-8 rounded-2xl"
       >
-        <p className={styles.sectionSubText}>Convert NFT with a click</p>
+        <p className={styles.sectionSubText}>Convert AI NFT with a click</p>
         <h3 className={styles.sectionHeadText}> NFT</h3>
 
         <form
-          ref={formRef}
           onSubmit={handleSubmit}
           className="mt-12 flex flex-col gap-8"
         >
@@ -73,8 +88,8 @@ const Hero = () => {
             <input
               type="text"
               name="name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              
+              onChange={(e) => { setName(e.target.value) }}
               placeholder="name"
               className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
             />
@@ -84,8 +99,8 @@ const Hero = () => {
             <input
               type="text"
               name="description"
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
+        
+              onChange={(e) => { setDescription(e.target.value) }}
               placeholder="description"
               className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
             />
@@ -103,7 +118,18 @@ const Hero = () => {
         variants={slideIn("right", "tween", 0.2, 1)}
         className="flex-[0.75] bg-black-100 mt-16 p-8 rounded-2xl"
       >
-        <img src={logo} />
+        {!loading && image ? (
+            <img src={image} alt="AI generated image" />
+          ) : loading ? (
+            <div className="image__placeholder">
+              <Spinner animation="border" />
+              <p>{message}</p>
+            </div>
+          ) : (
+            <>
+              <img src={logo} alt="logo" />
+            </>
+          )}
       </div>
     </div>
   );
