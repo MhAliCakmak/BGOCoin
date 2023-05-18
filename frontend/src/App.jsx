@@ -1,5 +1,5 @@
-import { BrowserRouter } from "react-router-dom";
-import {Hero, Navbar } from "./components";
+import {Hero, Navbar,Upload } from "./components";
+import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
@@ -7,7 +7,10 @@ function App() {
       <div className="relative z-0 bg-primary">
         <div className="bg-hero-pattern bg-cover bg-no-repeat bg-center">
           <Navbar />
-          <Hero />
+          <Routes>
+            <Route path="/" element={<Hero />} />
+            <Route path="/upload" element={<Upload />} />
+          </Routes>
         </div>
       </div>
     </BrowserRouter>

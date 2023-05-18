@@ -1,5 +1,6 @@
 import Hero from "./Hero"
 import Navbar from "./Navbar"
+import Upload from "./Upload"
 
 
-export { Hero, Navbar }
+export { Hero, Navbar,Upload }
