@@ -4,7 +4,7 @@ import { NFTStorage, File } from "nft.storage";
 import axios from "axios";
 
 import { Buffer } from "buffer";
-import Spinner from "react-bootstrap/Spinner";
+import { BeatLoader } from 'react-spinners'
 import { styles } from "../styles";
 import { slideIn } from "../utils/motion";
 import { logo } from "../assets";
@@ -154,9 +154,13 @@ const Hero = () => {
         {image ? (
           <img src={image} alt="AI generated image" />
         ) : loading ? (
-          <div className="image__placeholder">
-            <Spinner animation="border" />
-            <p>{message}</p>
+          <div className="flex flex-col items-center content-center justify-center mx-auto ">
+            
+            <p className="text-white font-medium mt-4">{message}</p>
+            <BeatLoader className=""
+          color={'#123abc'} 
+       
+        />
           </div>
         ) : (
           <>
