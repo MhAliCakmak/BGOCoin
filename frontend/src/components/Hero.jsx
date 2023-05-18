@@ -8,7 +8,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { styles } from "../styles";
 import { slideIn } from "../utils/motion";
 import { logo } from "../assets";
-import { expect } from "chai";
+
 const Hero = () => {
   const { mint, approveNFT } = useNFTFunctions();
   const contractFunctions = useContractFunctions();
