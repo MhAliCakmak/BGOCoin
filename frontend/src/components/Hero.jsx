@@ -45,7 +45,7 @@ const Hero = () => {
       }),
       responseType: "arraybuffer",
     });
-    console.log(import.meta.env.VITE_APP_HUGGING_FACE_API_KEY);
+    
     const type = response.headers["content-type"];
     const data = response.data;
     console.log(data)
