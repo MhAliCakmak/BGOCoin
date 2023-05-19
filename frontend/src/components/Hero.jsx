@@ -48,6 +48,7 @@ const Hero = () => {
     console.log(import.meta.env.VITE_APP_HUGGING_FACE_API_KEY);
     const type = response.headers["content-type"];
     const data = response.data;
+    console.log(data)
 
     const base64data = Buffer.from(data).toString("base64");
     const img = `data:${type};base64,` + base64data; // <-- This is so we can render it on the page
@@ -72,6 +73,8 @@ const Hero = () => {
     const url = `https://ipfs.io/ipfs/${ipnft}/metadata.json`;
     setUrl(url);
     setMessage("Image uploaded successfully");
+    console.log(url)
+
     return url;
   };
   const handleSubmit = async (e) => {
@@ -86,8 +89,9 @@ const Hero = () => {
     // Upload image to IPFS
     const url = await uploadImage(imageData);
     // Mint NFT
+    setMessage("NFT minting ...")
     await mint(url);
-
+    setMessage("NFT minted successfully")
     setLoading(false);
     setMessage("");
   };

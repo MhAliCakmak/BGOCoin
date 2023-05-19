@@ -2,9 +2,11 @@ import React, { useRef, useState } from "react";
 import { useContractFunctions, useNFTFunctions } from "../hooks";
 import { NFTStorage, File } from "nft.storage";
 import axios from "axios";
-
+import { AiOutlineCloudUpload } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { MdDelete } from "react-icons/md";
 import { Buffer } from "buffer";
-import { BeatLoader } from 'react-spinners'
+import { BeatLoader } from "react-spinners";
 import { styles } from "../styles";
 import { slideIn } from "../utils/motion";
 import { logo } from "../assets";
@@ -12,66 +14,61 @@ import { logo } from "../assets";
 const Upload = () => {
   const { mint, approveNFT } = useNFTFunctions();
   const contractFunctions = useContractFunctions();
-
+  const [wrongImageType, setWrongImageType] = useState(false);
   const [message, setMessage] = useState(null);
-  const [nft, setNft] = useState(null);
   const [url, setUrl] = useState(null);
-
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [imageType, setImageType] = useState("");
+  const [imageAsset, setImageAsset] = useState(null);
   const [image, setImage] = useState("");
-
   const [loading, setLoading] = useState(false);
-  const createImage = async () => {
-    setMessage("Generating Image...");
 
-    // You can replace this with different model API's
-    const URL = `https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2`;
-
-    // Send the request
-    const response = await axios({
-      url: URL,
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${
-          import.meta.env.VITE_APP_HUGGING_FACE_API_KEY
-        }`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      data: JSON.stringify({
-        inputs: description,
-        options: { wait_for_model: true },
-      }),
-      responseType: "arraybuffer",
-    });
-    console.log(import.meta.env.VITE_APP_HUGGING_FACE_API_KEY);
-    const type = response.headers["content-type"];
-    const data = response.data;
-
-    const base64data = Buffer.from(data).toString("base64");
-    const img = `data:${type};base64,` + base64data; // <-- This is so we can render it on the page
-    setImage(img);
-
-    return data;
+  const onImageChange = (event) => {
+    setMessage("Uploading Image ...");
+    const { type, name } = event.target.files[0];
+    if (event.target.files && event.target.files[0]) {
+      const fileTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
+      if (fileTypes.includes(type)) {
+        
+        setWrongImageType(false);
+        setImageAsset(URL.createObjectURL(event.target.files[0]));
+        setImageType(event.target.files[0].type);
+        const nameF=type.replace("/",".")
+        setImage(nameF);
+        console.log(nameF)
+      } else {
+        setWrongImageType(true);
+        setImageAsset(null);
+        setImageType(null);
+      }
+    } else {
+      setImageAsset(null);
+      setImageType(null);
+    }
   };
 
-  const uploadImage = async (imageData) => {
-    setMessage("uploading Image ...");
+  const uploadImage = async () => {
+    
     // Create instance to NFT.Storage
     const nftStorage = new NFTStorage({
       token: import.meta.env.VITE_APP_NFT_STORAGE_API,
     });
+    const response = await axios.get(imageAsset, { responseType: "arraybuffer" });
+    const data = Buffer.from(response.data);
 
-    // Send request to store image
+    // Upload image to NFT.Storage
     const { ipnft } = await nftStorage.store({
-      image: new File([imageData], "image.jpeg", { type: "image/jpeg" }),
       name: name,
       description: description,
+      image: new File([data], image, { type: imageType }),
     });
     const url = `https://ipfs.io/ipfs/${ipnft}/metadata.json`;
+    setMessage("Uploading Metadata ...");
+
     setUrl(url);
     setMessage("Image uploaded successfully");
+    console.log(url)
     return url;
   };
   const handleSubmit = async (e) => {
@@ -81,13 +78,12 @@ const Upload = () => {
       return;
     }
     setLoading(true);
-    // Call AI API to generate a image based on description
-    const imageData = await createImage();
     // Upload image to IPFS
-    const url = await uploadImage(imageData);
+    const url = await uploadImage();
     // Mint NFT
+    setMessage("NFT minting ...")
     await mint(url);
-
+    setMessage("NFT minted successfully")
     setLoading(false);
     setMessage("");
   };
@@ -100,7 +96,9 @@ const Upload = () => {
         variants={slideIn("left", "tween", 0.2, 1)}
         className="flex-[0.75] bg-black-100 mt-16 p-8 rounded-2xl"
       >
-        <p className={styles.sectionSubText}>Convert AI NFT with a click</p>
+        <p className={styles.sectionSubText}>
+          Convert Picture to NFT with a click
+        </p>
         <h3 className={styles.sectionHeadText}> NFT</h3>
 
         <form onSubmit={handleSubmit} className="mt-12 flex flex-col gap-8">
@@ -136,9 +134,7 @@ const Upload = () => {
             {loading ? "Converting..." : "Convert"}
           </button>
           {!loading && url && (
-            <button
-              className=" bg-tertiary py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary"
-            >
+            <button className=" bg-tertiary py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary">
               View&nbsp;
               <a href={url} target="_blank" rel="noreferrer">
                 Metadata
@@ -151,8 +147,27 @@ const Upload = () => {
         variants={slideIn("right", "tween", 0.2, 1)}
         className="flex-[0.75] bg-black-100 mt-16 p-8 rounded-2xl"
       >
-        {image ? (
-          <img src={image} alt="AI generated image" />
+        {wrongImageType && (
+              <p className="text-red-500 mb-5 text-xl transition-all duration-150 ease-in">
+                Please upload a valid image.
+              </p>
+            )}
+           
+        {!imageAsset ? (
+          <label>
+            <div className="flex flex-col items-center justify-center h-full">
+              <div className="flex flex-col justify-center items-center">
+                <p className="font-bold text-2xl">
+                  <AiOutlineCloudUpload />
+                </p>
+                <p className="text-lg">Click to upload</p>
+              </div>
+              <p className="mt-32 text-gray-400">
+                Use high-quality JPG, SVG ,PNG, GIF or TIFF less than 20 MB
+              </p>
+            </div>
+            <input type="file" className="hidden" onChange={onImageChange} />
+          </label>
         ) : loading ? (
           <div className="flex flex-col items-center content-center justify-center mx-auto ">
             
@@ -162,10 +177,17 @@ const Upload = () => {
        
         />
           </div>
-        ) : (
-          <>
-            <img src={logo} alt="logo" />
-          </>
+        ):(
+          <div className="relative h-full">
+            <img src={imageAsset} alt="pin" className="h-full" />
+            <button
+              type="button"
+              className="absolute bottom-3 right-3 bg-black text-white text-xl rounded-full cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out"
+              onClick={() => setImageAsset(null)}
+            >
+              <MdDelete />
+            </button>
+          </div>
         )}
       </div>
     </div>

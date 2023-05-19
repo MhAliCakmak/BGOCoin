@@ -44,7 +44,11 @@ const Navbar = () => {
               onClick={() => setActive(link.title)}
             >
               
-              <a href={`#${link.id}`}>{link.title}</a>
+              <Link
+                to={`${link.id}`}
+              >
+                {link.title}
+              </Link>
             </li>
           ))}
           <li>

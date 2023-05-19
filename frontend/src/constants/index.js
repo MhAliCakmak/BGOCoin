@@ -1,15 +1,15 @@
 export const navLinks = [
     {
-      id: "Whitepaper",
-      title: "Whitepaper",
+      id: "/",
+      title: "Ai image to NFT",
     },
     {
-      id: "Roadmap",
-      title: "Roadmap",
+      id: "upload",
+      title: "Image to NFT",
     },
     {
-      id: "PitchDeck",
-      title: "PitchDeck",
+      id: "WhitePaper",
+      title: "WhitePaper",
     },
   ];
 
