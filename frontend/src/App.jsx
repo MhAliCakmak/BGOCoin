@@ -1,4 +1,4 @@
-import {Hero, Navbar,Upload } from "./components";
+import {Hero, Navbar,Upload,ChatGpt } from "./components";
 import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -10,6 +10,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Hero />} />
             <Route path="/upload" element={<Upload />} />
+            <Route path="/chat" element={<ChatGpt />} />
           </Routes>
         </div>
       </div>

@@ -7,10 +7,11 @@ export const navLinks = [
       id: "upload",
       title: "Image to NFT",
     },
-    {
-      id: "WhitePaper",
-      title: "WhitePaper",
-    },
+	{
+		id:"chat",
+		title:"Chat with GPT-4"
+	},
+    
   ];
 
 export const CONTRACT_ADDRESS="0x8BACaeDEe41289073d3D8E297Fd567e1f26C2844"

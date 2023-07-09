@@ -12,7 +12,7 @@ const Navbar = () => {
   const account = useSelector((state) => state.accounts.account);
   const [active, setActive] = useState("");
   const [toggle, setToggle] = useState(false);
-  const [loading,setLoading] = useState(false)
+  const [loading,setLoading] = useState(false);
   return (
     <nav
       className={`
