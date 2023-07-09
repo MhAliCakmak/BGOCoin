@@ -12,8 +12,12 @@ import { slideIn } from "../utils/motion";
 import { logo } from "../assets";
 
 const Upload = () => {
-  const { mint, approveNFT } = useNFTFunctions();
-  const contractFunctions = useContractFunctions();
+  const [haveMetamask,setHaveMetamask]=useState(false)
+  
+  if(window.ethereum){
+    setHaveMetamask(true)
+    const { mint, approveNFT } = useNFTFunctions();
+  }
   const [wrongImageType, setWrongImageType] = useState(false);
   const [message, setMessage] = useState(null);
   const [url, setUrl] = useState(null);

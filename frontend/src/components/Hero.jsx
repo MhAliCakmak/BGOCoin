@@ -10,10 +10,6 @@ import { slideIn } from "../utils/motion";
 import { logo } from "../assets";
 
 const Hero = () => {
-  const { mint, approveNFT } = useNFTFunctions();
-  const contractFunctions = useContractFunctions();
-
-  
   const [message, setMessage] = useState(null);
   const [nft, setNft] = useState(null);
   const [url, setUrl] = useState(null);
@@ -24,22 +20,6 @@ const Hero = () => {
 
   const [loading, setLoading] = useState(false);
 
-  //if statement for metamask
-  if (typeof window.ethereum === "undefined") {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-4xl font-bold">Please install MetaMask</h1>
-        <a
-          href="https://metamask.io/download.html"
-          target="_blank"
-          rel="noreferrer"
-          className="mt-5 px-5 py-3 bg-blue-500 text-white rounded-md"
-        >
-          Install MetaMask
-        </a>
-      </div>
-    );
-  }
   const createImage = async () => {
     setMessage("Generating Image...");
 
@@ -108,7 +88,12 @@ const Hero = () => {
     const url = await uploadImage(imageData);
     // Mint NFT
     setMessage("NFT minting ...")
-    await mint(url);
+    if(haveMetamask){
+
+      await mint(url);
+    }else{
+      console.log("install metamask")
+    }
     setMessage("NFT minted successfully")
     setLoading(false);
     setMessage("");
