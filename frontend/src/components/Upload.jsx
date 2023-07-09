@@ -86,7 +86,12 @@ const Upload = () => {
     const url = await uploadImage();
     // Mint NFT
     setMessage("NFT minting ...")
-    await mint(url);
+    if(haveMetamask){
+
+      await mint(url); 
+    }else{
+      console.log("Install Metamask");
+    }
     setMessage("NFT minted successfully")
     setLoading(false);
     setMessage("");
