@@ -5,6 +5,10 @@ import {setAccount} from "../store/slicers/account";
 const useSetAccount = () => {
     const dispatch = useDispatch();
     const connectAccount = async () =>{
+        if(!window.ethereum){
+            console.log("Install Metamask");
+            return;
+        }
         if(window.ethereum){
             try{
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
