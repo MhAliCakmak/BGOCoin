@@ -13,16 +13,7 @@ const Navbar = () => {
   const [active, setActive] = useState("");
   const [toggle, setToggle] = useState(false);
   const [loading,setLoading] = useState(false);
-  //if statement dont have metamaskx
-  useEffect(() => {
-    if (window.ethereum) {
-      window.ethereum.on("accountsChanged", (accounts) => {
-        if (accounts.length > 0) {
-          connectAccount();
-        }
-      });
-    } 
-  }, []);
+  
   return (
     <nav
       className={`

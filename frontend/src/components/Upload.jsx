@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useContractFunctions, useNFTFunctions } from "../hooks";
 import { NFTStorage, File } from "nft.storage";
 import axios from "axios";
@@ -10,14 +11,10 @@ import { BeatLoader } from "react-spinners";
 import { styles } from "../styles";
 import { slideIn } from "../utils/motion";
 import { logo } from "../assets";
+import account from "../store/slicers/account";
 
 const Upload = () => {
   const [haveMetamask,setHaveMetamask]=useState(false)
-  
-  if(window.ethereum){
-    setHaveMetamask(true)
-    const { mint, approveNFT } = useNFTFunctions();
-  }
   const [wrongImageType, setWrongImageType] = useState(false);
   const [message, setMessage] = useState(null);
   const [url, setUrl] = useState(null);
@@ -27,6 +24,12 @@ const Upload = () => {
   const [imageAsset, setImageAsset] = useState(null);
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
+  const account = useSelector((state) => state.accounts.account);
+  if(account){
+
+    const { mint } = useNFTFunctions();
+  }
+
 
   const onImageChange = (event) => {
     setMessage("Uploading Image ...");
@@ -86,7 +89,7 @@ const Upload = () => {
     const url = await uploadImage();
     // Mint NFT
     setMessage("NFT minting ...")
-    if(haveMetamask){
+    if(account){
 
       await mint(url); 
     }else{
