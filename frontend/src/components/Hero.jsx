@@ -39,7 +39,7 @@ const Hero = () => {
         </a>
       </div>
     );
-  }S
+  }
   const createImage = async () => {
     setMessage("Generating Image...");
 
